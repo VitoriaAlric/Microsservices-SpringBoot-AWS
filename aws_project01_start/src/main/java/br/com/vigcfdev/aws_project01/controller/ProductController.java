@@ -1,7 +1,9 @@
 package br.com.vigcfdev.aws_project01.controller;
 
+import br.com.vigcfdev.aws_project01.enums.EventType;
 import br.com.vigcfdev.aws_project01.model.Product;
 import br.com.vigcfdev.aws_project01.repository.ProductRepository;
+import br.com.vigcfdev.aws_project01.service.ProductPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class ProductController {
 
     private ProductRepository productRepository;
+    private ProductPublisher productPublisher;
 
     @Autowired
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductPublisher productPublisher) {
         this.productRepository = productRepository;
+        this.productPublisher = productPublisher;
     }
 
     @GetMapping
@@ -38,6 +42,9 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
         Product productCreated = productRepository.save(product);
+
+        productPublisher.publishProductEvents(productCreated, EventType.PRODUCT_CREATED, "matilde");
+
         return new ResponseEntity<Product>(productCreated, HttpStatus.CREATED);
     }
 
@@ -47,6 +54,10 @@ public class ProductController {
         if (productRepository.existsById(id)) {
             product.setId(id);
             Product productUpdate = productRepository.save(product);
+
+            productPublisher.publishProductEvents(productUpdate, EventType.PRODUCT_UPDATE, "doralice");
+
+
             return new ResponseEntity<Product>(productUpdate, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,9 +68,13 @@ public class ProductController {
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            productRepository.delete(product);
-            return new ResponseEntity<Product>(product, HttpStatus.OK);
+            Product productDeleted = optionalProduct.get();
+
+            productRepository.delete(productDeleted);
+
+            productPublisher.publishProductEvents(productDeleted, EventType.PRODUCT_DELETED, "hannah");
+
+            return new ResponseEntity<Product>(productDeleted, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
