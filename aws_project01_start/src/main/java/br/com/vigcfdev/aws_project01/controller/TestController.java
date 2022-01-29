@@ -14,16 +14,23 @@ public class TestController {
     private static final Logger LOG = LoggerFactory.getLogger(TestController.class);
 
     @GetMapping("/project/{name}")
-    public ResponseEntity<?> dogTest(@PathVariable String name) {
+    public ResponseEntity<?> projectTest(@PathVariable String name) {
         LOG.info("Test controller - name: {}", name);
 
         return ResponseEntity.ok("Name: " + name);
     }
 
     @GetMapping("/project/Textcolor")
-    public ResponseEntity<?> dogColor() {
+    public ResponseEntity<?> projectColor() {
         LOG.info("Test controller - Always black!");
 
         return ResponseEntity.ok("Always black!");
+    }
+
+    @GetMapping("/project/Textcolor")
+    public ResponseEntity<?> projectColor2() {
+        LOG.info("Test controller - Always red!");
+
+        return ResponseEntity.ok("Always red!");
     }
 }
