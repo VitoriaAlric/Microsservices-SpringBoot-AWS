@@ -1,3 +1,9 @@
+br/com/vigcfdev/aws_project01/controller/ProductController.java
+ br.com.vigcfdev.aws_project01.controller.ProductController
+br/com/vigcfdev/aws_project01/repository/ProductRepository.java
+ br.com.vigcfdev.aws_project01.repository.ProductRepository
+br/com/vigcfdev/aws_project01/model/Product.java
+ br.com.vigcfdev.aws_project01.model.Product
 br/com/vigcfdev/aws_project01/AwsProject01Application.java
  br.com.vigcfdev.aws_project01.AwsProject01Application
 br/com/vigcfdev/aws_project01/controller/TestController.java
